@@ -2,7 +2,7 @@
 #include <Wire.h>
 
 struct I2cData {
-    int32_t count; // pulse count since the last read 4 bytes
+    int32_t count; // pulse count since the last read
 };
 
 I2cData txData = I2cData { count : 0 };
@@ -13,7 +13,7 @@ void sendData()
 {
     // we always send exactly the same data on each and every request
     Wire.write((byte*)&txData, sizeof(txData));
-    Serial.print("Count:");
+    Serial.print("Sending:");
     Serial.println(txData.count);
     txData.count = 0;
 }
@@ -21,7 +21,6 @@ void sendData()
 void count()
 {
     txData.count++;
-    Serial.println(txData.count);
 }
 
 void setup()
