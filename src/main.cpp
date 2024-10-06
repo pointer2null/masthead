@@ -8,11 +8,14 @@ struct I2cData {
 I2cData txData = I2cData { count : 0 };
 
 int windSpeedPin = DD2;
+bool pulse = false;
 
 void sendData()
 {
     // we always send exactly the same data on each and every request
     Wire.write((byte*)&txData, sizeof(txData));
+    Serial.print("Bytes:");
+    Serial.println(int(sizeof(txData)));
     Serial.print("Sending:");
     Serial.println(txData.count);
     txData.count = 0;
@@ -21,6 +24,7 @@ void sendData()
 void count()
 {
     txData.count++;
+    pulse = true;
 }
 
 void setup()
@@ -36,8 +40,11 @@ void setup()
 
 void loop()
 {
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(1000);
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(1000);
+    if (pulse) {
+        digitalWrite(LED_BUILTIN, HIGH);
+        pulse = false;
+        delay(100);
+        digitalWrite(LED_BUILTIN, LOW);
+    }
+    
 }
